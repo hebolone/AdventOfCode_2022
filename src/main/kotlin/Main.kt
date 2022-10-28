@@ -1,8 +1,8 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+import Days.*
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-
-    println("Program arguments: ${args.joinToString()}")
+fun main() {
+    DaysBuilder("/home/simone/Scrivania/AdventOfCode/2022")             //    Set input path
+        .addDay(1, Day01())
+        .setTest(1)
+        .solve(1)                //    Default is 'both'
 }
