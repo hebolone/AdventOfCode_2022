@@ -38,16 +38,16 @@ class DaysBuilder(inputPath : String) : IDaysBuilder {
         val solver = if(_Days.containsKey(day)) _Days[day] else null
         solver?.let  {
             //    Open correct input data file
-            val input = getInput(day, solver.isTest)
-            solver withInput input
+            val input = getInput(day, it.isTest)
+            it withInput input
 
             val results = mutableListOf<SetOfResult>()
             when(questionType) {
-                TQUESTIONTYPE.BASIC -> results.add(SetOfResult(day, TQUESTIONTYPE.BASIC, solver.basic(), solver.isTest))
-                TQUESTIONTYPE.ADVANCED -> results.add(SetOfResult(day, TQUESTIONTYPE.ADVANCED, solver.advanced(), solver.isTest))
+                TQUESTIONTYPE.BASIC -> results.add(SetOfResult(day, TQUESTIONTYPE.BASIC, it.basic(), it.isTest))
+                TQUESTIONTYPE.ADVANCED -> results.add(SetOfResult(day, TQUESTIONTYPE.ADVANCED, it.advanced(), it.isTest))
                 else -> {
-                    results.add(SetOfResult(day, TQUESTIONTYPE.BASIC, solver.basic(), solver.isTest))
-                    results.add(SetOfResult(day, TQUESTIONTYPE.ADVANCED, solver.advanced(), solver.isTest))
+                    results.add(SetOfResult(day, TQUESTIONTYPE.BASIC, it.basic(), it.isTest))
+                    results.add(SetOfResult(day, TQUESTIONTYPE.ADVANCED, it.advanced(), it.isTest))
                 }
             }
             results.forEach { println(it) }

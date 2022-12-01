@@ -15,7 +15,10 @@ abstract class DayBase {
 
     fun setInput(input : List<String>) {
         _input = input
+        parse()
     }
 
     var isTest : Boolean = false
+
+    abstract fun parse()
 }
