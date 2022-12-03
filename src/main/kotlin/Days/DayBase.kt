@@ -20,5 +20,5 @@ abstract class DayBase {
 
     var isTest : Boolean = false
 
-    abstract fun parse()
+    protected abstract fun parse()
 }
