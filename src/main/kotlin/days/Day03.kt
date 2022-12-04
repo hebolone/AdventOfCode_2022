@@ -1,4 +1,4 @@
-package Days
+package days
 
 class Day03 : DayBase(), ISolver {
     override fun basic(): Any = _basicResponse
@@ -7,9 +7,6 @@ class Day03 : DayBase(), ISolver {
         parseAdvance()
         return _advancedResponse
     }
-
-    private var _basicResponse = 0
-    private var _advancedResponse = 0
 
     override fun parse() {
         _input.forEach {
@@ -21,6 +18,12 @@ class Day03 : DayBase(), ISolver {
         }
     }
 
+    //region Members
+    private var _basicResponse = 0
+    private var _advancedResponse = 0
+    //endregion
+
+    //region Methods
     private fun parseAdvance() {
         val groupItems = mutableListOf<String>()
         _input.forEach {
@@ -33,18 +36,16 @@ class Day03 : DayBase(), ISolver {
         }
     }
 
-    private fun findItems(firstCompartment : String, secondCompartment : String) : MutableList<Char> {
+    private fun findItems(first : String, second : String) : MutableList<Char> {
         val retValue = mutableListOf<Char>()
-        firstCompartment.forEach {
-            if(secondCompartment.contains(it))
+        first.forEach {
+            if(second.contains(it))
                 retValue.add(it)
         }
         return retValue
     }
 
-    private fun convertItemToDigit(item : Char) : Int {
-        return if(item.isLowerCase()) item.code - 96 else item.code - 38
-    }
+    private fun convertItemToDigit(item : Char) : Int = if(item.isLowerCase()) item.code - 96 else item.code - 38
 
     private fun findItemsInGroups(group : List<String>) : Char {
         var retValue = '_'
@@ -56,4 +57,5 @@ class Day03 : DayBase(), ISolver {
         }
         return retValue
     }
+    //endregion
 }

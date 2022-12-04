@@ -1,5 +1,5 @@
 import java.io.File
-import Days.*
+import days.*
 
 interface IDaysBuilder {
     fun addDay(day : Int, solver : ISolver) : IDaysBuilder

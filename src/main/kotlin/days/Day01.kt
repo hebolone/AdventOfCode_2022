@@ -1,4 +1,4 @@
-package Days
+package days
 
 class Day01 : DayBase(), ISolver {
     override fun basic() : Any = _elvesCalories.max()

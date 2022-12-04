@@ -1,4 +1,4 @@
-package Days
+package days
 
 interface ISolver {
     fun basic() : Any
