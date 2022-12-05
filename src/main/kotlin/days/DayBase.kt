@@ -12,13 +12,12 @@ interface ISolver {
 
 abstract class DayBase {
     protected var _input = listOf<String>()
+    var isTest : Boolean = false
 
     fun setInput(input : List<String>) {
         _input = input
         parse()
     }
-
-    var isTest : Boolean = false
 
     protected abstract fun parse()
 }

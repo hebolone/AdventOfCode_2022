@@ -20,6 +20,7 @@ class DaysBuilder(inputPath : String) : IDaysBuilder {
     private val _FilePattern = "$inputPath/day_%day%.txt"
     private val _FilePatternTest = "$inputPath/day_%day%_test.txt"
 
+    //region IDaysBuilder
     override fun addDay(day : Int, solver : ISolver) : IDaysBuilder {
         _Days[day] = solver
         return this
@@ -53,7 +54,9 @@ class DaysBuilder(inputPath : String) : IDaysBuilder {
             results.forEach { println(it) }
         } ?: println("Incorrect day: $day is not present")
     }
+    //endregion
 
+    //region Private
     private fun Int.totalDigits(digits : Int = 2) : String = "${"0".repeat(kotlin.math.max(digits - toString().length, 0))}$this"
 
     private fun getInput(day : Int, isTest : Boolean = false) : List<String>  {
@@ -69,4 +72,5 @@ class DaysBuilder(inputPath : String) : IDaysBuilder {
             throw Exception("Input file $fileName for day $day not found")
         return retValue
     }
+    //endregion
 }
