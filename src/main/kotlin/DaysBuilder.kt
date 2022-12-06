@@ -3,7 +3,7 @@ import days.*
 
 interface IDaysBuilder {
     fun addDay(day : Int, solver : ISolver) : IDaysBuilder
-    fun solve(day : Int, questionType : TQUESTIONTYPE = TQUESTIONTYPE.BOTH)
+    fun solve(day : Int = -1, questionType : TQUESTIONTYPE = TQUESTIONTYPE.BOTH)
     fun setTest(vararg days : Int) : IDaysBuilder
 }
 
@@ -36,19 +36,20 @@ class DaysBuilder(inputPath : String) : IDaysBuilder {
 
     override fun solve(day : Int, questionType : TQUESTIONTYPE) {
         //    Select correct solver
-        val solver = if(_Days.containsKey(day)) _Days[day] else null
+        val dayToSolve = if(day == -1) _Days.keys.max() else day
+        val solver = if(_Days.containsKey(dayToSolve)) _Days[dayToSolve] else null
         solver?.let  {
             //    Open correct input data file
-            val input = getInput(day, it.isTest)
+            val input = getInput(dayToSolve, it.isTest)
             it withInput input
 
             val results = mutableListOf<SetOfResult>()
             when(questionType) {
-                TQUESTIONTYPE.BASIC -> results.add(SetOfResult(day, TQUESTIONTYPE.BASIC, it.basic(), it.isTest))
-                TQUESTIONTYPE.ADVANCED -> results.add(SetOfResult(day, TQUESTIONTYPE.ADVANCED, it.advanced(), it.isTest))
+                TQUESTIONTYPE.BASIC -> results.add(SetOfResult(dayToSolve, TQUESTIONTYPE.BASIC, it.basic(), it.isTest))
+                TQUESTIONTYPE.ADVANCED -> results.add(SetOfResult(dayToSolve, TQUESTIONTYPE.ADVANCED, it.advanced(), it.isTest))
                 else -> {
-                    results.add(SetOfResult(day, TQUESTIONTYPE.BASIC, it.basic(), it.isTest))
-                    results.add(SetOfResult(day, TQUESTIONTYPE.ADVANCED, it.advanced(), it.isTest))
+                    results.add(SetOfResult(dayToSolve, TQUESTIONTYPE.BASIC, it.basic(), it.isTest))
+                    results.add(SetOfResult(dayToSolve, TQUESTIONTYPE.ADVANCED, it.advanced(), it.isTest))
                 }
             }
             results.forEach { println(it) }

@@ -3,7 +3,7 @@ package days
 class Day05 : DayBase(), ISolver {
     override fun basic(): Any {
         _moves.forEach {
-            _stacks.MoveCrates(it, TYPEOFMOVER.BASIC)
+            _stacks.moveCrates(it, TYPEOFMOVER.CRATEMOVER9000)
         }
         return _stacks.getLastCrates()
     }
@@ -11,7 +11,7 @@ class Day05 : DayBase(), ISolver {
     override fun advanced(): Any {
         parse()
         _moves.forEach {
-            _stacks.MoveCrates(it, TYPEOFMOVER.CRATEMOVER9000)
+            _stacks.moveCrates(it, TYPEOFMOVER.CRATEMOVER9001)
         }
         return _stacks.getLastCrates()
     }
@@ -52,18 +52,17 @@ class Day05 : DayBase(), ISolver {
     private val _stacks = mutableMapOf<Int, String>()
     private val _moves = mutableListOf<Move>()
     private data class Move(val noOfCrates : Int, val from : Int, val to : Int)
-    private enum class TYPEOFMOVER { BASIC, CRATEMOVER9000}
+    private enum class TYPEOFMOVER { CRATEMOVER9000, CRATEMOVER9001}
     //endregion
 
     //region Methods
-    private fun MutableMap<Int, String>.MoveCrates(move : Move, typeOfMove : TYPEOFMOVER) {
+    private fun MutableMap<Int, String>.moveCrates(move : Move, typeOfMove : TYPEOFMOVER) {
         val noOfCratesFrom = this[move.from]!!.length
         val cratesToBeMoved = when(typeOfMove) {
-            TYPEOFMOVER.BASIC -> this[move.from]!!.reversed().take(move.noOfCrates)
-            TYPEOFMOVER.CRATEMOVER9000 -> this[move.from]!!.drop(noOfCratesFrom - move.noOfCrates)
+            TYPEOFMOVER.CRATEMOVER9000 -> this[move.from]!!.reversed().take(move.noOfCrates)
+            TYPEOFMOVER.CRATEMOVER9001 -> this[move.from]!!.drop(noOfCratesFrom - move.noOfCrates)
         }
-        val cratesFrom = this[move.from]!!.take(noOfCratesFrom - move.noOfCrates)
-        this[move.from] = cratesFrom
+        this[move.from] = this[move.from]!!.take(noOfCratesFrom - move.noOfCrates)
         this[move.to] += cratesToBeMoved
     }
 
