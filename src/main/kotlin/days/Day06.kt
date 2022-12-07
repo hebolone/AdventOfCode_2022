@@ -9,12 +9,9 @@ class Day06 : DayBase(), ISolver {
 
     //region Methods
     private fun findMarker(s : String, noOfChar : Int) : Int {
-        for(i in noOfChar .. s.length) {
-            val chunk = s.substring(i - noOfChar, i)
-            if(checkIfMarker(chunk)) {
+        for(i in noOfChar .. s.length)
+            if(checkIfMarker(s.substring(i - noOfChar, i)))
                 return i
-            }
-        }
         return -1
     }
 
