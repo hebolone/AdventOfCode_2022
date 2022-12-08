@@ -8,7 +8,8 @@ fun main() {
         //.addDay(4, Day04())
         //.addDay(5, Day05())
         //.addDay(6, Day06())
-        .addDay(7, Day07())
-        //.setTest(7)
+        //.addDay(7, Day07())
+        .addDay(8, Day08())
+        //.setTest(8)
         .solve()                //    Default is 'both'
 }
