@@ -9,10 +9,10 @@ class Day08 : DayBase(), ISolver {
     override fun advanced(): Any {
         var betterView = 0
         (0 until _x * _y).forEach {
-            val coordinate = _board?.getCoordinateFromIndex(it) !!
-            val sightLines = _board?.getSightLines(coordinate)!!
+            val coordinate = _board?.convertIndexToCoordinate(it) !!
+            val sightLines = getSightLines(coordinate)
             val minimumTreeHeight = _board?.get(coordinate)!!
-            val visibleTrees = countVisibleTrees(sightLines, minimumTreeHeight)
+            val visibleTrees = countVisibleTreesFromATree(sightLines, minimumTreeHeight)
             if(visibleTrees > betterView)
                 betterView = visibleTrees
         }
@@ -61,7 +61,7 @@ class Day08 : DayBase(), ISolver {
         positions.forEach { position ->
             when(position.value) {
                 TYPEOFWATCHING.ROW -> {
-                    val rowTrees = _board?.getRow(position.key)!!
+                    val rowTrees = getRow(position.key)
                     val visibleTrees = countVisibleTreesSingle(rowTrees)
                     //  Mark trees as already watched
                     visibleTrees.forEach {
@@ -70,7 +70,7 @@ class Day08 : DayBase(), ISolver {
                     }
                 }
                 TYPEOFWATCHING.COLUMN -> {
-                    val columnTrees = _board?.getColumn(position.key)!!
+                    val columnTrees = getColumn(position.key)
                     val visibleTrees = countVisibleTreesSingle(columnTrees)
                     //  Mark trees as already watched
                     visibleTrees.forEach {
@@ -83,7 +83,7 @@ class Day08 : DayBase(), ISolver {
         return treesSeen
     }
 
-    private fun BoardExtended<Int>.getRow(watchingPosition : Coordinate) : List<Coordinate> {
+    private fun getRow(watchingPosition: Coordinate) : List<Coordinate> {
         val retValue = mutableListOf<Coordinate>()
         (0 until _x).forEach {
             retValue.add(Coordinate(it, watchingPosition.y))
@@ -91,7 +91,7 @@ class Day08 : DayBase(), ISolver {
         return if(watchingPosition.x == _x) retValue.reversed() else retValue
     }
 
-    private fun BoardExtended<Int>.getColumn(watchingPosition : Coordinate) : List<Coordinate> {
+    private fun getColumn(watchingPosition: Coordinate) : List<Coordinate> {
         val retValue = mutableListOf<Coordinate>()
         (0 until _y).forEach {
             retValue.add(Coordinate(watchingPosition.x, it))
@@ -103,7 +103,7 @@ class Day08 : DayBase(), ISolver {
         val retValue = mutableListOf<Coordinate>()
         var currentHeight = -1
         (line.indices).forEach { it ->
-            var treeHeight = _board?.get(line[it]) ?: -1
+            val treeHeight = _board?.get(line[it]) ?: -1
             if(treeHeight > currentHeight) {
                 retValue.add(line[it])
                 currentHeight = treeHeight
@@ -115,7 +115,7 @@ class Day08 : DayBase(), ISolver {
     private fun countVisibleTreesSingle(line : List<Coordinate>, currentTreeHeight : Int) : List<Coordinate> {
         val retValue = mutableListOf<Coordinate>()
         (line.indices).forEach { it ->
-            var treeHeight = _board?.get(line[it]) ?: -1
+            val treeHeight = _board?.get(line[it]) ?: -1
             when {
                 currentTreeHeight <= treeHeight -> {
                     retValue.add(line[it])
@@ -127,44 +127,35 @@ class Day08 : DayBase(), ISolver {
         return retValue
     }
 
-    private fun BoardExtended<Int>.getSightLines(tree : Coordinate) : Map<SIGHTDIRECTION, List<Coordinate>> {
+    private fun getSightLines(tree: Coordinate) : Map<SIGHTDIRECTION, List<Coordinate>> {
         //  Starting from a single tree inside the wood
         val retValue = mutableMapOf<SIGHTDIRECTION, List<Coordinate>>()
-        listOf<SIGHTDIRECTION>(SIGHTDIRECTION.WEST, SIGHTDIRECTION.NORTH, SIGHTDIRECTION.EAST, SIGHTDIRECTION.SOUTH).forEach {
+        listOf(SIGHTDIRECTION.WEST, SIGHTDIRECTION.NORTH, SIGHTDIRECTION.EAST, SIGHTDIRECTION.SOUTH).forEach {
             when(it) {
                 SIGHTDIRECTION.WEST -> {
                     val trees = mutableListOf<Coordinate>()
-                    for (i in (0 until tree.x)) {
-                        _board?.get(i, tree.y)?.let {
-                            trees.add(Coordinate(i, tree.y))
-                        }
-                    }
+                    for (i in (0 until tree.x))
+                        trees.add(Coordinate(i, tree.y))
                     retValue[it] = trees.reversed()
                 }
                 SIGHTDIRECTION.NORTH -> {
                     val trees = mutableListOf<Coordinate>()
                     for (i in (0 until tree.y)) {
-                        _board?.get(tree.x, i)?.let {
-                            trees.add(Coordinate(tree.x, i))
-                        }
+                        trees.add(Coordinate(tree.x, i))
                     }
                     retValue[it] = trees.reversed()
                 }
                 SIGHTDIRECTION.EAST -> {
                     val trees = mutableListOf<Coordinate>()
                     for (i in ((tree.x + 1) until _x)) {
-                        _board?.get(i, tree.y)?.let {
-                            trees.add(Coordinate(i, tree.y))
-                        }
+                        trees.add(Coordinate(i, tree.y))
                     }
                     retValue[it] = trees
                 }
                 SIGHTDIRECTION.SOUTH -> {
                     val trees = mutableListOf<Coordinate>()
                     for (i in ((tree.y + 1) until _y)) {
-                        _board?.get(tree.x, i)?.let {
-                            trees.add(Coordinate(tree.x, i))
-                        }
+                        trees.add(Coordinate(tree.x, i))
                     }
                     retValue[it] = trees
                 }
@@ -173,8 +164,8 @@ class Day08 : DayBase(), ISolver {
         return retValue
     }
 
-    private fun countVisibleTrees(views : Map<SIGHTDIRECTION, List<Coordinate>>, treeHeight : Int) : Int {
-        var retValue = mutableListOf<Int>()
+    private fun countVisibleTreesFromATree(views : Map<SIGHTDIRECTION, List<Coordinate>>, treeHeight : Int) : Int {
+        val retValue = mutableListOf<Int>()
         views.values.forEach {
             retValue.add(countVisibleTreesSingle(it, treeHeight).size)
         }

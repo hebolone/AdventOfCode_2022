@@ -1,12 +1,12 @@
 package tools
 
-open class Board<T>(val x : Int, val y : Int, initializer : () -> T) /*: Iterable<T>*/ {
-    protected val _Cells : MutableList<T> = mutableListOf()
-    private val _Initializer = initializer
+open class Board<T>(val x : Int, val y : Int, initializer : () -> T) {
+    protected val _cells : MutableList<T> = mutableListOf()
+    private val _initializer = initializer
     init {
-        (1..(x * y)).forEach { _ -> _Cells.add(initializer()) }
+        (1..(x * y)).forEach { _ -> _cells.add(initializer()) }
     }
-    fun getLinear(value : Int) : T = _Cells[value]
+    fun getLinear(value : Int) : T = _cells[value]
     fun getSize() : Int = x * y
     fun printBoard(printFun : (t : T) -> String = { it.toString() }) : String {
         val sb = StringBuilder()
@@ -19,20 +19,21 @@ open class Board<T>(val x : Int, val y : Int, initializer : () -> T) /*: Iterabl
         return sb.toString()
     }
     //  Indexer
-    open operator fun get(xFrom : Int, yFrom : Int) : T = _Cells[xFrom + yFrom * x]
-    open operator fun get(value : Int) : T = _Cells[value]
-    open operator fun set(xFrom : Int, yFrom : Int, value : T) { _Cells[xFrom + yFrom * x] = value }
-    open operator fun set(index : Int, value : T) { _Cells[index] = value }
+    open operator fun get(xFrom : Int, yFrom : Int) : T = _cells[xFrom + yFrom * x]
+    open operator fun get(value : Int) : T = _cells[value]
+    open operator fun set(xFrom : Int, yFrom : Int, value : T) { _cells[xFrom + yFrom * x] = value }
+    open operator fun set(index : Int, value : T) { _cells[index] = value }
     fun getCoordinatesFromIndex(index : Int) : Pair<Int, Int> {
         val y_derived = index / y
         val x_derived = index - (y * y_derived)
         return Pair(x_derived, y_derived)
     }
-    fun slice(newX : Int, newY : Int) : Board<T> {
-        val retValue = Board(newX, newY, _Initializer)
-        (0 until newX).forEach { oldX ->
+    fun slice(newX : Int, newY : Int) : Board<T> = slice(0, newX, 0, newY)
+    fun slice(xStart : Int, yStart : Int, xEnd : Int, yEnd : Int) : Board<T> {
+        val retValue = Board(xEnd - xStart, yEnd - yStart, _initializer)
+        (xStart until xEnd).forEach { oldX ->
             run {
-                (0 until newY).forEach { oldY ->
+                (yStart until yEnd).forEach { oldY ->
                     run {
                         retValue[oldX, oldY] = this[oldX, oldY]
                     }
@@ -49,16 +50,23 @@ class BoardExtended<T>(xExt : Int, yExt : Int, initializerExt : () -> T) : Board
         return if(xFrom < 0 || xFrom >= x || yFrom < 0 || yFrom >= y)
             null
         else
-            _Cells[index]
+            _cells[index]
     }
     fun getOrNull(coordinate: Coordinate) : T? = getOrNull(coordinate.x, coordinate.y)
-    fun getCoordinateFromIndex(index : Int) : Coordinate {
+    fun convertIndexToCoordinate(index : Int) : Coordinate {
         val y_derived = index / y
         val x_derived = index - (y * y_derived)
         return Coordinate(x_derived, y_derived)
     }
-    fun getIndexFromCoordinate(coordinate : Coordinate) : Int = coordinate.x + coordinate.y * x
+    fun convertCoordinateToIndex(coordinate : Coordinate) : Int = coordinate.x + coordinate.y * x
     operator fun get(coordinate : Coordinate) : T = this[coordinate.x, coordinate.y]
 }
 
-data class Coordinate(val x : Int, val y : Int)
+data class Coordinate(var x : Int, var y : Int) {
+    override fun equals(other: Any?): Boolean {
+        if (other == null ||
+            other !is Coordinate ||
+            x != other.x || y != other.y) return false
+        return true
+    }
+}
