@@ -1,6 +1,5 @@
 package days
 
-import java.util.*
 import tools.Coordinate
 
 class Day09 : DayBase(), ISolver {
@@ -33,7 +32,7 @@ class Day09 : DayBase(), ISolver {
 
     //region Members
     private data class Command(val direction : String, val unit : Int)
-    private class Recorder() {
+    private class Recorder {
         private var index = 0
         private val records = mutableMapOf<Int, Coordinate>()
         fun add(coordinate : Coordinate) {
@@ -57,7 +56,7 @@ class Day09 : DayBase(), ISolver {
     private fun go(command : Command) {
         repeat(command.unit) { _ ->
             //  Move Head
-            when (command.direction.lowercase(Locale.getDefault())) {
+            when (command.direction.lowercase()) {
                 "l" -> _snake[0]!! += Coordinate(-1, 0)
                 "u" -> _snake[0]!! += Coordinate(0, 1)
                 "r" -> _snake[0]!! += Coordinate(1, 0)
@@ -65,7 +64,7 @@ class Day09 : DayBase(), ISolver {
             }
             //  Move Tails
             (1 until _snake.size).forEach {
-                moveTail(it - 1, it)
+                moveSingleElement(it - 1, it)
             }
             _recorder.add(_snake[_snake.size - 1]!!)
         }
@@ -76,7 +75,7 @@ class Day09 : DayBase(), ISolver {
         this.y += movement.y
     }
 
-    private fun moveTail(tailBefore : Int, tailCurrent : Int) {
+    private fun moveSingleElement(tailBefore : Int, tailCurrent : Int) {
         //  Calculate who this tail is following
         val previous = _snake[tailBefore]!!
         val current = _snake[tailCurrent]!!
