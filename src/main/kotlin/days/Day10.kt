@@ -64,7 +64,10 @@ class Day10 : DayBase(), ISolver {
                 spritePosition = getStatus(_states, (scanLineLength * currentLine) + it)
                 drawSprite(spritePosition, videoMemory)
             }
-            retValue += videoMemory.print() + "\r\n"
+            retValue += buildString {
+                append(videoMemory.convertToVideo())
+                append("\r\n")
+            }
             currentLine ++
             videoMemory.clear()
         }
@@ -72,7 +75,7 @@ class Day10 : DayBase(), ISolver {
         return retValue
     }
 
-    private fun Map<Int, Int>.print() : String {
+    private fun Map<Int, Int>.convertToVideo() : String {
         var video = ""
         (0 until this.size).forEach {
             video += if(this[it] == 0) "." else "#"
