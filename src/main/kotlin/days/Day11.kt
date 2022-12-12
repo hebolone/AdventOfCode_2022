@@ -50,10 +50,10 @@ class Day11 : DayBase(), ISolver {
 
     private fun getBoredLevelBasic(worryLevel : ULong) : ULong = worryLevel / 3U
 
-    private fun getBoredLevelAdvanced(worryLevel : ULong) : ULong = worryLevel
+    private fun getBoredLevelAdvanced(worryLevel : ULong) : ULong = worryLevel % 9699690U
 
     private fun execute(times : Int, handlerBoredLevel : (ULong) -> ULong) {
-        val checkPoints = listOf(1, 20/*, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000*/)
+//        val checkPoints = listOf(1, 20/*, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000*/)
 
         repeat(times) { t ->
             _monkeys.forEach {
@@ -67,12 +67,12 @@ class Day11 : DayBase(), ISolver {
                 }
                 it.items.clear()
             }
-            if(checkPoints.contains(t + 1)) {
-                println("== After Round ${t + 1} ==")
-                _monkeys.forEach {
-                    println("Monkey ${it.index} : items: ${it.itemsInspected}")
-                }
-            }
+//            if(checkPoints.contains(t + 1)) {
+//                println("== After Round ${t + 1} ==")
+//                _monkeys.forEach {
+//                    println("Monkey ${it.index} : items: ${it.itemsInspected}")
+//                }
+//            }
         }
     }
     //endregion

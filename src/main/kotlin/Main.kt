@@ -13,6 +13,6 @@ fun main() {
         //.addDay(9, Day09())
         //.addDay(10, Day10())
         .addDay(11, Day11())
-        .setTest(11)
-        .solve(11/*, TQUESTIONTYPE.ADVANCED*/)                //    Default is 'both'
+        //.setTest(11)
+        .solve()                //    Default is 'both'
 }
