@@ -55,7 +55,7 @@ class BoardExtended<T>(xExt : Int, yExt : Int, initializerExt : () -> T) : Board
     fun getOrNull(coordinate: Coordinate) : T? = getOrNull(coordinate.x, coordinate.y)
     fun convertIndexToCoordinate(index : Int) : Coordinate {
         val y_derived = index / y
-        val x_derived = index - (y * y_derived)
+        val x_derived = index - (x * y_derived)
         return Coordinate(x_derived, y_derived)
     }
     fun convertCoordinateToIndex(coordinate : Coordinate) : Int = coordinate.x + coordinate.y * x
